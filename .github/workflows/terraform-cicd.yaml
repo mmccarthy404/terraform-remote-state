@@ -13,77 +13,84 @@ permissions:
   contents: read
   pull-requests: write
 
-steps:
-- name: Checkout
-  uses: actions/checkout@v3
+jobs:
+  terraform-cicd:
+    name: Terraform CICD
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
 
-- name: Configure AWS credentials
-  uses: aws-actions/configure-aws-credentials@v2
-  with:
-    role-to-assume: arn:aws:iam::004351562122:role/github-oidc-aws-michael-mccarthy
-    aws-region: us-east-1
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
 
-- name: Setup Terraform
-  uses: hashicorp/setup-terraform@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::004351562122:role/github-oidc-aws-michael-mccarthy
+        aws-region: us-east-1
 
-- name: Terraform Format
-  id: fmt
-  run: terraform fmt -check --recursive
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
 
-- name: Terraform Init
-  id: id
-  run: terraform init -backend-config backend.tfvars -upgrade
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -check --recursive
 
-- name: Terraform Validate
-  id: validate
-  run: terraform validate -no-color
+    - name: Terraform Init
+      id: id
+      run: terraform init -backend-config backend.tfvars -upgrade
 
-- name: Terraform Plan
-  id: plan
-  if: github.event_name == 'pull_request'
-  run: terraform plan -var-file terraform.tfvars -no-color -input=false
-  continue-on-error: true
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
 
-- uses: actions/github-script@v6
-  if: github.event_name == 'pull_request'
-  env:
-    PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-  with: 
-    script: |
-      const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-      #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-      #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-      <details><summary>Validation Output</summary>
+    - name: Terraform Plan
+      id: plan
+      if: github.event_name == 'pull_request'
+      run: terraform plan -var-file terraform.tfvars -no-color -input=false
+      continue-on-error: true
 
-      \`\`\`\n
-      ${{ steps.validate.outputs.stdout }}
-      \`\`\`
+    - uses: actions/github-script@v6
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with: 
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+          <details><summary>Validation Output</summary>
 
-      </details>
+          \`\`\`\n
+          ${{ steps.validate.outputs.stdout }}
+          \`\`\`
 
-      #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          </details>
 
-      <details><summary>Show Plan</summary>
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
 
-      \`\`\`\n
-      ${process.env.PLAN}
-      \`\`\`
+          <details><summary>Show Plan</summary>
 
-      </details>
+          \`\`\`\n
+          ${process.env.PLAN}
+          \`\`\`
 
-      *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          </details>
 
-      github.rest.issues.createComment({
-        issue_number: context.issue.number,
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        body: output
-      })
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
-- name: Terraform Plan Status
-  if: steps.plan.outcome == 'failure'
-  run: exit 1
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
 
-- name: Terraform Apply
-  if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-  run: terraform apply -var-file terraform.tfvars -auto-approve -input=false
+    - name: Terraform Plan Status
+      if: steps.plan.outcome == 'failure'
+      run: exit 1
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -var-file terraform.tfvars -auto-approve -input=false
