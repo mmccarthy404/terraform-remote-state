@@ -12,11 +12,14 @@ variable "remote_state" {
   })
 }
 
-variable "repo_roles" {
-  type = list(
-    object({
-      repo     = string
-      policies = list(string)
-    })
-  )
+variable "github_oidc" {
+  type = object({
+    url        = string
+    client_id  = string
+    thumbprint = string
+  })
+}
+
+variable "repos" {
+  type = list(string)
 }
