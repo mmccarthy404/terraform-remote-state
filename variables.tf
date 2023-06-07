@@ -11,3 +11,15 @@ variable "remote_state" {
     dynamodb_table_name_prefix = string
   })
 }
+
+variable "github_oidc" {
+  type = object({
+    url        = string
+    client_id  = string
+    thumbprint = string
+  })
+}
+
+variable "repos" {
+  type = list(string)
+}
