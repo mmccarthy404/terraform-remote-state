@@ -11,3 +11,12 @@ variable "remote_state" {
     dynamodb_table_name_prefix = string
   })
 }
+
+variable "repo_roles" {
+  type = list(
+    object({
+      repo     = string
+      policies = list(string)
+    })
+  )
+}
