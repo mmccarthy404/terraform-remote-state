@@ -41,6 +41,10 @@ resource "aws_iam_role" "this_repo" {
       ]
     })
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_iam_role" "repos" {
