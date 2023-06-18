@@ -19,4 +19,5 @@ jobs:
       terraform-directory: .
       terraform-var-file: terraform.tfvars
       terraform-backend-config: backend.tfvars
-    secrets: inherit
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
