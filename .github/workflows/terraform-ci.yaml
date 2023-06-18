@@ -19,5 +19,7 @@ jobs:
       terraform-directory: .
       terraform-var-file: terraform.tfvars
       terraform-backend-config: backend.tfvars
+      aws-region: us-east-1
+      aws-role: arn:aws:iam::004351562122:role/github-oidc-terraform-remote-state
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
