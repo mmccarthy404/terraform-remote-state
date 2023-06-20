@@ -82,29 +82,6 @@ resource "aws_iam_role" "repos" {
           Effect   = "Allow"
           Action   = "*"
           Resource = "*"
-        },
-        {
-          Effect = "Deny"
-          Action = "*"
-          Resource = [
-            "${aws_s3_bucket.state.arn}",
-            "${aws_s3_bucket.state.arn}/*"
-          ]
-          Condition = {
-            "StringNotEquals" = {
-              "s3:prefix" = "${each.key}"
-            }
-          }
-        },
-        {
-          Effect   = "Deny"
-          Action   = "*"
-          Resource = "${aws_dynamodb_table.state_lock.arn}"
-          Condition = {
-            "StringNotEquals" = {
-              "dynamodb:LeadingKeys" = "${aws_s3_bucket.state.arn}/${each.key}-md5"
-            }
-          }
         }
       ]
     })
