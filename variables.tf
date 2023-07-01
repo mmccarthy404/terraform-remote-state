@@ -16,7 +16,7 @@ variable "github_oidc" {
   type = object({
     url        = string
     client_id  = string
-    thumbprint = string
+    thumbprint = list(string)
   })
 }
 
