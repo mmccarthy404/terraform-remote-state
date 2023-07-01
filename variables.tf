@@ -14,8 +14,8 @@ variable "remote_state" {
 
 variable "github_oidc" {
   type = object({
-    url        = string
-    client_id  = string
+    url         = string
+    client_id   = string
     thumbprints = list(string)
   })
 }
