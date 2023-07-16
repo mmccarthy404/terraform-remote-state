@@ -19,5 +19,5 @@ github_oidc = {
 
 repos = [
   "aws-core-infra",
-  "ahead-in-the-cloud"
+  "serverless-bio"
 ]
