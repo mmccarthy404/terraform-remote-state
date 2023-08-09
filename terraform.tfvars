@@ -18,6 +18,6 @@ github_oidc = {
 }
 
 repos = [
-  "aws-core-infra",
-  "serverless-bio"
+  "aheadinthecloud",
+  "aws-core-infra"
 ]
