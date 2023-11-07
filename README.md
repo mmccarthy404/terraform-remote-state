@@ -1,6 +1,6 @@
 # terraform-remote-state
 
-Highly circular-dependent Terraform project; responsible for remote state infrastructure used accross all projects (including this one).
+Highly circular-dependent Terraform project; responsible for remote state infrastructure used across all projects (including this one).
 
 A number of AWS resources are provisioned through this deployment:
 * S3 (w/ versioning) for storing remote state (**circular-dependency**)
