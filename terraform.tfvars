@@ -19,5 +19,6 @@ github_oidc = {
 
 repos = [
   "aheadinthecloud",
-  "aws-core-infra"
+  "aws-core-infra",
+  "terraform-modules",
 ]
