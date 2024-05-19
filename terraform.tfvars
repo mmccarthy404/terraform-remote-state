@@ -21,4 +21,5 @@ repos = [
   "aheadinthecloud",
   "aws-core-infra",
   "terraform-modules",
+  "barbershop",
 ]
