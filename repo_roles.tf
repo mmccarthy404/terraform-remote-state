@@ -1,5 +1,5 @@
 locals {
-  github_username = "mmccarthy404"
+  github_username = "michaelmccarthydev"
   this_repo       = "terraform-remote-state"
 }
 
