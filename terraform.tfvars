@@ -20,6 +20,7 @@ github_oidc = {
 repos = [
   "aheadinthecloud",
   "aws-networking",
+  "michaelmccarthy",
   "terraform-modules",
   "barbershop",
 ]
