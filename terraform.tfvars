@@ -24,4 +24,5 @@ repos = [
   "terraform-modules",
   "barbershop",
   "black-ruby",
+  "michael-mccarthy-lakehouse",
 ]
