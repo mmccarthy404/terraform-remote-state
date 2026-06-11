@@ -25,4 +25,5 @@ repos = [
   "barbershop",
   "black-ruby",
   "michael-mccarthy-lake",
+  "reddit-radar",
 ]
